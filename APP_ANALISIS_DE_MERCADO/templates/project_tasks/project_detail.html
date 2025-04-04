@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}{{ project.name }} - Detalles{% endblock %}
+{% block content %}
+<h1>{{ project.name }}</h1>
+<p><strong>Descripción:</strong> {{ project.description }}</p>
+<p><strong>Manager:</strong> {{ project.manager.username }}</p>
+<p><strong>Fecha límite:</strong> {{ project.deadline }}</p>
+<p><strong>Miembros:</strong> {% for member in project.members.all %}{{ member.username }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+<p><strong>Habilidades requeridas:</strong> {% for skill in project.skills_required.all %}{{ skill.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+
+<h2>Tareas del Proyecto</h2>
+<a href="{% url 'task_create' %}?project={{ project.id }}" class="btn btn-primary mb-3">Añadir Tarea</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Estado</th>
+            <th>Prioridad</th>
+            <th>Asignado a</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td><a href="{% url 'task_detail' task.id %}">{{ task.title }}</a></td>
+            <td>{{ task.get_status_display }}</td>
+            <td>{{ task.get_priority_display }}</td>
+            <td>{{ task.assigned_to.username|default:"Sin asignar" }}</td>
+            <td>
+                <a href="{% url 'task_update' task.id %}" class="btn btn-sm btn-warning">Editar</a>
+                <a href="{% url 'task_delete' task.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No hay tareas en este proyecto.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'project_list' %}" class="btn btn-secondary">Volver a la lista</a>
+{% endblock %}

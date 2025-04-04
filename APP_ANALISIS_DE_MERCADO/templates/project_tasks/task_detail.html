@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}{{ task.title }} - Detalles{% endblock %}
+{% block content %}
+<h1>{{ task.title }}</h1>
+<p><strong>Descripción:</strong> {{ task.description }}</p>
+<p><strong>Proyecto:</strong> {{ task.project.name }}</p>
+<p><strong>Estado:</strong> {{ task.get_status_display }}</p>
+<p><strong>Prioridad:</strong> {{ task.get_priority_display }}</p>
+<p><strong>Asignado a:</strong> {{ task.assigned_to.username|default:"Sin asignar" }}</p>
+<p><strong>Creado por:</strong> {{ task.created_by.username }}</p>
+<p><strong>Fecha límite:</strong> {{ task.deadline }}</p>
+<p><strong>Habilidades requeridas:</strong> {% for skill in task.skills_required.all %}{{ skill.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+<a href="{% url 'task_update' task.id %}" class="btn btn-warning">Editar</a>
+<a href="{% url 'task_delete' task.id %}" class="btn btn-danger">Eliminar</a>
+<a href="{% url 'project_detail' task.project.id %}" class="btn btn-secondary">Volver al Proyecto</a>
+{% endblock %}
