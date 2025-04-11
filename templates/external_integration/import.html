@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Importar Ofertas</title>
+</head>
+<body>
+    <h1>Importar Ofertas de Empleo</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Importar desde Tecnoempleo</button>
+    </form>
+    <p><a href="{% url 'home' %}">Volver al inicio</a></p>
+</body>
+</html>

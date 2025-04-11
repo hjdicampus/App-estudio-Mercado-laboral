@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard del Mercado Laboral</title>
+    <style>
+        body {
+            background-color: beige;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+        h1 {
+            font-size: 60px;
+            text-align: center;
+        }
+        h2 {
+            font-size: 30px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+    </style>
+    <script src="{% static 'js/Chart.min.js' %}"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard del Mercado Laboral</h1>
+        <h2>Total de ofertas: {{ total_offers }}</h2>
+        <h2>Habilidades más demandadas</h2>
+        <canvas id="skillsChart" width="400" height="200"></canvas>
+        <p><a href="{% url 'home' %}">Volver al inicio</a></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('skillsChart').getContext('2d');
+            var skillsData = {
+                labels: [{% for skill in skills %}"{{ skill.name|escapejs }}", {% endfor %}],
+                datasets: [{
+                    label: 'Número de ofertas',
+                    data: [{% for skill in skills %}{{ skill.num_offers }}, {% endfor %}],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            };
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: skillsData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
